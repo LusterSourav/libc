@@ -505,7 +505,6 @@ dlopen
 dlsym
 dup
 dup2
-environ
 execl
 execle
 execlp
