@@ -437,10 +437,6 @@ extern "C" {
     pub static in6addr_any: in6_addr;
 }
 
-extern "C" {
-    pub static mut environ: *mut *mut c_char;
-}
-
 // FIXME(1.0): We want to remove these directives and instead expect that no-std users add their
 // own link configuration when required, rather than unconditionally linking everything that may
 // possibly be needed.
