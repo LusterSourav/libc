@@ -407,6 +407,9 @@ fn test_apple(target: &str) {
         }
     });
 
+    // not in apple headers, declare it yourself
+    cfg.skip_static(|s| s.ident() == "environ");
+
     cfg.skip_struct_field(move |struct_, field| {
         match (struct_.ident(), field.ident()) {
             // Anonymous ADT fields
