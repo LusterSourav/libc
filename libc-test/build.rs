@@ -407,6 +407,9 @@ fn test_apple(target: &str) {
         }
     });
 
+    // environ is POSIX but not declared in Apple headers
+    cfg.skip_static(|s| s.ident() == "environ");
+
     cfg.skip_struct_field(move |struct_, field| {
         match (struct_.ident(), field.ident()) {
             // Anonymous ADT fields
