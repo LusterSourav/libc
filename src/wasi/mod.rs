@@ -543,12 +543,21 @@ pub const _SC_THREAD_ROBUST_PRIO_INHERIT: c_int = 247;
 pub const _SC_THREAD_ROBUST_PRIO_PROTECT: c_int = 248;
 pub const _SC_MINSIGSTKSZ: c_int = 249;
 pub const _SC_SIGSTKSZ: c_int = 250;
+pub const HOST_NAME_MAX: c_int = 255;
 
 // unsafe code here is required in the stable, but not in nightly
 #[allow(unused_unsafe)]
 pub static CLOCK_MONOTONIC: clockid_t = unsafe { clockid_t(core::ptr::addr_of!(_CLOCK_MONOTONIC)) };
 #[allow(unused_unsafe)]
 pub static CLOCK_REALTIME: clockid_t = unsafe { clockid_t(core::ptr::addr_of!(_CLOCK_REALTIME)) };
+
+pub const LC_CTYPE: c_int = 0;
+pub const LC_NUMERIC: c_int = 1;
+pub const LC_TIME: c_int = 2;
+pub const LC_COLLATE: c_int = 3;
+pub const LC_MONETARY: c_int = 4;
+pub const LC_MESSAGES: c_int = 5;
+pub const LC_ALL: c_int = 6;
 
 pub const ABDAY_1: crate::nl_item = 0x20000;
 pub const ABDAY_2: crate::nl_item = 0x20001;
@@ -652,14 +661,27 @@ pub const PTHREAD_BARRIER_SERIAL_THREAD: c_int = -1;
 pub const PTHREAD_STACK_MIN: usize = 2048;
 pub const TIMER_ABSTIME: c_int = 1;
 
+pub const SOCK_CLOEXEC: c_int = 0x00002000;
+pub const SOCK_NONBLOCK: c_int = 0x00004000;
+
+pub const SOL_SOCKET: c_int = 0x7fffffff;
+
+pub const SO_TYPE: c_int = 3;
+
 f! {
     pub unsafe fn FD_ISSET(fd: c_int, set: *const fd_set) -> bool {
+        if fd < 0 || fd >= FD_SETSIZE {
+            panic!("fd {fd} out of range: valid fds are 0..FD_SETSIZE (0..{FD_SETSIZE})");
+        }
         let set = &*set;
         let n = set.__nfds;
         return set.__fds[..n].iter().any(|p| *p == fd);
     }
 
     pub unsafe fn FD_SET(fd: c_int, set: *mut fd_set) -> () {
+        if fd < 0 || fd >= FD_SETSIZE {
+            panic!("fd {fd} out of range: valid fds are 0..FD_SETSIZE (0..{FD_SETSIZE})");
+        }
         let set = &mut *set;
         let n = set.__nfds;
         if !set.__fds[..n].iter().any(|p| *p == fd) {
@@ -1132,6 +1154,11 @@ extern "C" {
     pub fn pthread_cond_destroy(cond: *mut pthread_cond_t) -> c_int;
     pub fn pthread_condattr_init(attr: *mut pthread_condattr_t) -> c_int;
     pub fn pthread_condattr_destroy(attr: *mut pthread_condattr_t) -> c_int;
+    pub fn pthread_condattr_setclock(attr: *mut pthread_condattr_t, clock_id: clockid_t) -> c_int;
+    pub fn pthread_condattr_getclock(
+        attr: *const pthread_condattr_t,
+        clock_id: *mut clockid_t,
+    ) -> c_int;
     pub fn pthread_condattr_setpshared(attr: *mut pthread_condattr_t, b: c_int) -> c_int;
     pub fn pthread_condattr_getpshared(attr: *const pthread_condattr_t, b: *mut c_int) -> c_int;
 

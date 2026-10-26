@@ -2,15 +2,15 @@
 //!
 //! Native POSIX threading library.
 //!
-//! <https://github.com/bminor/glibc/tree/master/sysdeps/nptl>
+//! <https://github.com/sailfishos-mirror/glibc/tree/master/sysdeps/nptl>
 
 pub(crate) mod bits {
     #[cfg_attr(
         any(
             target_arch = "mips",
+            target_arch = "mips64",
             target_arch = "mips32r6",
-            target_arch = "mips",
-            target_arch = "mips32r6",
+            target_arch = "mips64r6",
         ),
         path = "../../mips/nptl/bits/struct_mutex.rs"
     )]

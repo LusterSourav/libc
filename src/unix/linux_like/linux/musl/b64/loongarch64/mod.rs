@@ -8,8 +8,6 @@ pub type wchar_t = c_int;
 pub type nlink_t = c_uint;
 pub type blksize_t = c_int;
 
-pub type stat64 = stat;
-
 s! {
     pub struct stat {
         pub st_dev: crate::dev_t,
@@ -25,24 +23,24 @@ s! {
         __pad2: Padding<c_int>,
         pub st_blocks: crate::blkcnt_t,
 
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_atime: crate::time_t,
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_atime_nsec: c_long,
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_mtime: crate::time_t,
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_mtime_nsec: c_long,
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_ctime: crate::time_t,
-        #[cfg(not(musl_v1_2_3))]
+        #[cfg(not(musl_v1_2))]
         pub st_ctime_nsec: c_long,
 
-        #[cfg(musl_v1_2_3)]
+        #[cfg(musl_v1_2)]
         pub st_atim: crate::timespec,
-        #[cfg(musl_v1_2_3)]
+        #[cfg(musl_v1_2)]
         pub st_mtim: crate::timespec,
-        #[cfg(musl_v1_2_3)]
+        #[cfg(musl_v1_2)]
         pub st_ctim: crate::timespec,
 
         __unused: Padding<[c_int; 2usize]>,
@@ -65,7 +63,7 @@ s! {
         pub orig_a0: u64,
         pub csr_era: u64,
         pub csr_badv: u64,
-        pub reserved: [u64; 10],
+        reserved: Padding<[u64; 10]>,
     }
 
     pub struct user_fp_struct {

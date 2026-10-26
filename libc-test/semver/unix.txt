@@ -531,7 +531,6 @@ fileno
 flock
 fnmatch
 fopen
-fork
 fpathconf
 fpos_t
 fprintf
@@ -846,7 +845,6 @@ symlink
 symlinkat
 sysconf
 syslog
-system
 tcdrain
 tcflag_t
 tcflow

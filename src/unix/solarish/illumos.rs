@@ -24,7 +24,7 @@ s! {
         pub aio_lio_opcode: c_int,
         pub aio_resultp: crate::aio_result_t,
         pub aio_state: c_int,
-        pub aio__pad: [c_int; 1],
+        aio__pad: Padding<[c_int; 1]>,
     }
 
     pub struct shmid_ds {
@@ -39,19 +39,13 @@ s! {
         pub shm_atime: crate::time_t,
         pub shm_dtime: crate::time_t,
         pub shm_ctime: crate::time_t,
-        pub shm_pad4: [i64; 4],
+        shm_pad4: Padding<[i64; 4]>,
     }
 
     pub struct fil_info {
         pub fi_flags: c_int,
         pub fi_pos: c_int,
         pub fi_name: [c_char; crate::FILNAME_MAX as usize],
-    }
-
-    #[cfg_attr(any(target_arch = "x86", target_arch = "x86_64"), repr(packed(4)))]
-    pub struct epoll_event {
-        pub events: u32,
-        pub u64: u64,
     }
 
     pub struct utmpx {
@@ -63,9 +57,24 @@ s! {
         pub ut_exit: exit_status,
         pub ut_tv: crate::timeval,
         pub ut_session: c_int,
-        pub ut_pad: [c_int; _UTX_PADSIZE],
+        ut_pad: Padding<[c_int; _UTX_PADSIZE]>,
         pub ut_syslen: c_short,
         pub ut_host: [c_char; _UTX_HOSTSIZE],
+    }
+}
+
+s_no_extra_traits! {
+    #[cfg_attr(any(target_arch = "x86", target_arch = "x86_64"), repr(packed(4)))]
+    pub struct epoll_event {
+        pub events: u32,
+        pub data: epoll_data,
+    }
+
+    pub union epoll_data {
+        pub ptr: *mut c_void,
+        pub fd: c_int,
+        pub u32: u32,
+        pub u64: u64,
     }
 }
 

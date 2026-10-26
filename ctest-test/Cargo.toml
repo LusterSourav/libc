@@ -7,13 +7,10 @@ rust-version = "1.88"
 
 [build-dependencies]
 ctest = { path = "../ctest" }
-cc = "1.2"
+cc = "1.4.2"
 
 [dev-dependencies]
 ctest = { path = "../ctest" }
-
-[dependencies]
-libc = { path = ".." }
 
 [[bin]]
 name = "t1"
